@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>{% block title %}Smartphones{% endblock %}</title>
+</head>
+<body>
+
+        <div id="header">
+            {% block header %}
+                <a href="/">Home</a>
+                <a href="/login/">Login</a>
+                <a href="/user_page/">My page</a>
+            {% endblock %}
+        </div>
+
+    <h1>
+        <div id="name">
+            {% block name %}
+                Search your phone specification
+            {% endblock %}
+        </div>
+    </h1>
+
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div id="footer">
+        {% block footer %}
+            <h6>VanHohenheim 2018</h6>
+        {% endblock %}
+    </div>
+
+</body>
+</html>

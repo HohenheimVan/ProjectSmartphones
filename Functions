@@ -1,0 +1,18 @@
+Funkcje aplikacji:
+	- link do wyswietlania wszystkich modeli producenta
+	- wyszukiwanie wszystkich modeli po marce(lista rozwijana)
+	- wyszukiwanie po nazwie modelu(wyswietla tez liste podobnych)
+		- dodawanie do listy ulubionych(baza danych)
+		- wybieranie atrybutow do wyswietlenia
+		- wyszukiwanie drugiego tel, dodanie do bazy i porownanie wybranych atrybutow
+	-logowanie
+		-lista ulubionych
+		- ostatnio wyszukiwane
+Strona glowna:
+	- naglowek, stopka
+	- wyszukiwarka
+	- strona logowania
+	- 
+
+
+wyswietlanie ceny**

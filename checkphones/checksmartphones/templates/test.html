@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% load my_filter %}
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <form method="post" action="">
+        {% csrf_token %}
+        Device: {{ form.device }}
+        Brand: {{ form.brand }}
+        Position: {{ form.position }}
+        <p>
+            Second device:{{ form.device2 }}
+            Second brand:{{ form.brand2 }}
+            Second Position:{{ form.position2 }}
+        </p>
+                Attributes:{{ form.attributes }}
+
+        <input type="submit" value="Find">
+    </form>
+{% if ok %}
+    <table>
+        <tr>
+            {% for i in attributes %}
+            <th width="200">
+                {{i}}:
+            </th>
+            {% endfor %}
+
+        </tr>
+        {% for dict in list_dicts %}
+            <tr>
+            {% for attribute in attributes %}
+                <td width="200">
+                    {{ dict|get_item:attribute }}
+                </td>
+            {% endfor %}
+
+            </tr>
+        {% endfor %}
+    </table>
+
+    <table>
+
+        {% for dict in list_dicts2 %}
+            <tr>
+            {% for attribute in attributes %}
+                <td width="200">
+                    {{ dict|get_item:attribute }}
+                </td>
+            {% endfor %}
+
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% endblock %}
