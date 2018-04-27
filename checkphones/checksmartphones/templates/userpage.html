@@ -1,8 +1,71 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
+{% load static %}
+{% load my_filter %}
 {% block name %}
+    Add phone to favourites
+{% endblock %}
+{% block content %}
 
-    <h2>My phones</h2>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <form method="post" action="">
+        {% csrf_token %}
+        <p>
+            Device: {{ form.device }}
+            Brand: {{ form.brand }}
+            Position: {{ form.position }}
+            <input type="submit" value="Find" name="find">
+        </p>
+        Attributes:{{ form.attributes }}
 
+    </form>
+    {% if ok %}
+        <table class="table-striped table-responsive-xl">
+            <tr>
+                {% for attribute in attributes %}
+                <th class="border">
+                    {{attribute}}:
+                </th>
+                {% endfor %}
+                <th class="border">
+                    Action
+                </th>
+            </tr>
+            <tr>
+                {% for attribute in attributes %}
+                    <td class="border">
+                        {{ dictio|get_item:attribute }}
+                    </td>
+            {% endfor %}
+                <td>
+                    <form method="post" action="" >
+                        {% csrf_token %}
+                        <textarea autofocus name="to_db" title="to_db" hidden>{{dictio}}</textarea>
 
+                            <button type="submit" class="btn btn-dark" name="to_db_btn">Add to favourites</button>
+                        
+                    </form>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+
+    <h3>My Favourite Phones:</h3>
+    <table class="table-striped table-responsive-xl">
+        {% for dict in favourites %}
+           <tr>
+                {% for i in all_attributes %}
+                    <th class="border">
+                        {{i.0}}:
+                    </th>
+                {% endfor %}
+            </tr>
+                <tr>
+                    {% for attribute in all_attributes %}
+                        <td class="border">
+                            {{ dict.to_db|get_item:attribute.0 }}
+                        </td>
+                    {% endfor %}
+                </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

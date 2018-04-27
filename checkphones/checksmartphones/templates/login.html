@@ -6,13 +6,17 @@
 
 {% block content %}
 
-    <form action="" method="post">
+    <form action="" method="post" class="form-group">
         {% csrf_token %}
     {{ form }}
-        <input type="submit" value="login">
+        <button type="submit" value="login" class="btn btn-dark">
+            login
+        </button>
     </form>
     {{ message }}
 
-<h4>or <a href="/register/">register</a></h4>
+    <p>
+        or <a href="/register/">register here</a>
+    </p>
 
 {% endblock %}

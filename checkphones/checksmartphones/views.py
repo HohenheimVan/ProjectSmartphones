@@ -1,10 +1,13 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
 from django.views import View
 
-from checksmartphones.forms import SearchForm, LoginForm, RegisterForm
+from checksmartphones import forms
+from checksmartphones.forms import SearchForm, LoginForm, RegisterForm, UserSearchForm
+from checksmartphones.models import HiddenModel
 from fonoapi import fonoapi
 
 class IndexView(View):
@@ -25,13 +28,19 @@ class IndexView(View):
             position2 = form.cleaned_data['position2']
             brand2 = form.cleaned_data['brand2']
             attributes = form.cleaned_data['attributes']
+            similar = form.cleaned_data['similar']
+            similar2 = form.cleaned_data['similar2']
 
             phones = fon.getdevice(device, brand=brand, position=position)
             phones2 = fon.getdevice(device2, brand=brand2, position=position2)
 
             list_dicts = phones.list_of_dicts()
             list_dicts2 = phones2.list_of_dicts()
-            return render(request, 'test.html', {'form': form, 'list_dicts': list_dicts, 'list_dicts2': list_dicts2, 'ok':True, 'attributes': attributes})
+            dictio = list_dicts[0]
+            dictio2 = list_dicts2[0]
+            return render(request, 'test.html', {'form': form, 'list_dicts': list_dicts, 'list_dicts2': list_dicts2,
+                                                 'ok':True, 'attributes': attributes, 'dictio': dictio,
+                                                 'dictio2': dictio2, 'similar': similar, 'similar2': similar2})
 
 class LoginView(View):
     def get(self,request):
@@ -47,11 +56,12 @@ class LoginView(View):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/')
+                return redirect('/user_page/')
 
             else:
                 message = 'zly login lub haslo'
                 return render(request, 'login.html', {'form': form, 'message': message})
+
 class RegisterView(View):
     def get(self,request):
         form = RegisterForm()
@@ -77,6 +87,57 @@ class RegisterView(View):
                     return render(request, 'register.html', {'form': form, 'message': 'Username already exist'})
 
 
-class UserPageView(View):
-    def get(sel, request):
-        return render(request, 'userpage.html')
+class UserPageView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        form = UserSearchForm()
+        all_attributes = forms.all_attributes
+        favourites = HiddenModel.objects.filter(user_id=request.user.id)
+        return render(request, 'userpage.html', {'form': form, 'all_attributes': all_attributes,
+                                                 'favourites': favourites})
+
+
+    def post(self, request):
+        form = UserSearchForm(request.POST)
+        fon = fonoapi.FonoAPI('cf3590b49448175eb05232c57bfc1d257cbf93113742cbfc')
+
+        if 'find' in request.POST:
+            if form.is_valid():
+                device = form.cleaned_data['device']
+                position = form.cleaned_data['position']
+                brand = form.cleaned_data['brand']
+                attributes = form.cleaned_data['attributes']
+                phones = fon.getdevice(device, brand=brand, position=position)
+                list_dicts = phones.list_of_dicts()
+                dictio = list_dicts[0]
+                all_attributes = forms.all_attributes
+                favourites = HiddenModel.objects.filter(user_id=request.user.id)
+
+                return render(request, 'userpage.html',
+                              {'form': form, 'list_dicts': list_dicts, 'ok': True, 'attributes': attributes,
+                               'dictio': dictio, 'favourites': favourites, 'all_attributes': all_attributes})
+
+        elif 'to_db_btn' in request.POST:
+            to_db = request.POST['to_db']
+            all_attributes = forms.all_attributes
+            favourites = HiddenModel.objects.filter(user_id=request.user.id)
+            HiddenModel.objects.create(to_db=to_db, user_id=request.user.id)
+            return render(request, 'userpage.html', {'form': form, 'favourites': favourites,
+                                                     'all_attributes': all_attributes})
+
+class UserLogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('/')
+
+class Boot(View):
+    def get(self, request):
+        return render(request, 'index.html')
+
+#Co jest do zrobienia:
+    # - wyszukiwanie po atrybutach, np mniejsze od 150g wg. slownika
+    # - jeden tel moze byc dodany tylko raz(id to bedzie DeviceName)
+
+    # -
+    #
+    # - **mozna zmienic nazwy atrybutow na ladniejsze**

@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import EmailValidator
 
 all_attributes =(
-        ('Brand', 'Brand'),
+        ('Brand', 'brand'),
         ('DeviceName','DeviceName'),
         ('_2g_bands', '_2g_bands'),
         ('_3_5mm_jack_', '_3_5mm_jack_'),
@@ -82,6 +82,8 @@ class SearchForm(forms.Form):
     brand2 = forms.CharField(max_length=32, label='Second brand', required=False)
     position2 = forms.IntegerField(required=False)
     attributes = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=all_attributes)
+    similar = forms.BooleanField(required=False)
+    similar2 = forms.BooleanField(required=False)
 
 
 class LoginForm(forms.Form):
@@ -95,3 +97,13 @@ class RegisterForm(forms.Form):
     first_name = forms.CharField(label='first-name')
     last_name = forms.CharField(label='last-name')
     email = forms.CharField(label='user-email', validators=[EmailValidator(message='zly email')])
+
+
+class UserSearchForm(forms.Form):
+    device = forms.CharField(max_length=32, label='Device name')
+    brand = forms.CharField(max_length=32, label='Brand', required=False)
+    position = forms.IntegerField(required=False)
+    attributes = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=all_attributes)
+
+class HiddenForm(forms.Form):
+     to_db = forms.Textarea()

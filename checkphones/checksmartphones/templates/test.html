@@ -1,58 +1,117 @@
 {% extends "base.html" %}
-
+{% load bootstrap3 %}
 {% load my_filter %}
+{% load static %}
 
 {% block content %}
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-    <form method="post" action="">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" xmlns="http://www.w3.org/1999/html"/>
+    <form method="post" action="" class="form-group">
         {% csrf_token %}
-        Device: {{ form.device }}
-        Brand: {{ form.brand }}
-        Position: {{ form.position }}
-        <p>
-            Second device:{{ form.device2 }}
-            Second brand:{{ form.brand2 }}
-            Second Position:{{ form.position2 }}
-        </p>
-                Attributes:{{ form.attributes }}
+        <table class="table-responsive-xl">
+            <tr>
+                <td>
+                    Device:
+                </td>
+                <td>
+                    {{ form.device }}
+                </td>
+                <td>
+                    show similar{{ form.similar }}
+                </td>
+                <td>
+                    Brand:
+                </td>
+                <td>
+                    {{ form.brand }}
+                </td>
+                <td>
+                    Position:
+                </td>
+                <td>
+                    {{ form.position }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Second device:
+                </td>
+                <td>
+                    {{ form.device2 }}
+                </td>
+                <td>
+                    show similar{{ form.similar2 }}
+                </td>
+                <td>
+                    Second brand:
+                </td>
+                <td>
+                    {{ form.brand2 }}
+                </td>
+                <td>
+                    Second Position:
+                </td>
+                <td>
+                    {{ form.position2 }}
+                </td>
+            </tr>
 
-        <input type="submit" value="Find">
+        </table>
+
+            Attributes:{{ form.attributes }}
+
+            <button type="submit" class="btn btn-dark" value="Find">
+                Find
+            </button>
     </form>
-{% if ok %}
-    <table>
-        <tr>
-            {% for i in attributes %}
-            <th width="200">
-                {{i}}:
-            </th>
-            {% endfor %}
-
-        </tr>
-        {% for dict in list_dicts %}
+    {% if ok %}
+        <table class="table-striped">
             <tr>
-            {% for attribute in attributes %}
-                <td width="200">
-                    {{ dict|get_item:attribute }}
-                </td>
-            {% endfor %}
-
+                {% for i in attributes %}
+                    <th class="border">
+                        {{i}}:
+                    </th>
+                {% endfor %}
             </tr>
-        {% endfor %}
-    </table>
+            {% if similar%}
+                {% for dict in list_dicts %}
+                    <tr>
+                        {% for attribute in attributes %}
+                            <td class="border">
+                                {{ dict|get_item:attribute }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                {% else %}
+                    <tr>
+                        {% for attribute in attributes %}
+                            <td class="border">
+                                {{ dictio|get_item:attribute }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
 
-    <table>
-
-        {% for dict in list_dicts2 %}
-            <tr>
-            {% for attribute in attributes %}
-                <td width="200">
-                    {{ dict|get_item:attribute }}
-                </td>
-            {% endfor %}
-
-            </tr>
-        {% endfor %}
-    </table>
+                {% if similar2 %}
+                    {% for dict in list_dicts2 %}
+                          <tr>
+                              {% for attribute in attributes %}
+                                  <td class="border">
+                                      {{ dict|get_item:attribute }}
+                                  </td>
+                              {% endfor %}
+                          </tr>
+                    {% endfor %}
+                {% else %}
+                <tr>
+                    {% for attribute in attributes %}
+                        <td class="border">
+                            {{ dictio2|get_item:attribute }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+        </table>
     {% endif %}
 {% endblock %}

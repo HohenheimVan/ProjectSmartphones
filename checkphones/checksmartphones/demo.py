@@ -1,6 +1,8 @@
 # import sys
 # import json
 # import requests
+from checksmartphones import forms
+from checksmartphones.models import HiddenModel
 from fonoapi import fonoapi
 fon = fonoapi.FonoAPI('cf3590b49448175eb05232c57bfc1d257cbf93113742cbfc')
 #
@@ -41,5 +43,15 @@ phones = fon.getdevice(device)
 #     x += 1
 keys = ['DeviceName']
 list_dicts = phones.list_of_dicts()
-for i in list_dicts:
-    print(i)
+#print(list_dicts)
+dict = list_dicts[0]
+attributes = forms.all_attributes
+favourites = HiddenModel.objects.all()
+
+#
+# for phone in favourites:
+#     for attribute in attributes:
+#         print(phone[attribute])
+
+
+

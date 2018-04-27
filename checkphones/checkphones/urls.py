@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from checksmartphones.views import IndexView, LoginView, RegisterView, UserPageView
+from checksmartphones.views import IndexView, LoginView, RegisterView, UserPageView, UserLogoutView, Boot
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^register/$', RegisterView.as_view(), name='register'),
     url(r'^user_page/$', UserPageView.as_view(), name='user-page'),
+    url(r'^logout/$', UserLogoutView.as_view(), name='logout'),
+    url(r'^bootstrap/$', Boot.as_view(), name='boot'),
 ]
