@@ -13,6 +13,9 @@
             Register
         </button>
     </form>
-    {{ message }}
-
+    {% if message %}
+        <div class="alert alert-dark">
+            {{ message }}
+        </div>
+    {% endif %}
 {% endblock %}

@@ -20,6 +20,7 @@ class IndexView(View):
         form = SearchForm(request.POST)
 
         fon = fonoapi.FonoAPI('cf3590b49448175eb05232c57bfc1d257cbf93113742cbfc')
+
         if form.is_valid():
             device = form.cleaned_data['device']
             position = form.cleaned_data['position']
@@ -41,6 +42,9 @@ class IndexView(View):
             return render(request, 'test.html', {'form': form, 'list_dicts': list_dicts, 'list_dicts2': list_dicts2,
                                                  'ok':True, 'attributes': attributes, 'dictio': dictio,
                                                  'dictio2': dictio2, 'similar': similar, 'similar2': similar2})
+        else:
+            form = SearchForm()
+            return render(request, 'test.html', {'form': form, 'message': 'Choose attributes'})
 
 class LoginView(View):
     def get(self,request):
@@ -59,8 +63,7 @@ class LoginView(View):
                 return redirect('/user_page/')
 
             else:
-                message = 'zly login lub haslo'
-                return render(request, 'login.html', {'form': form, 'message': message})
+                return render(request, 'login.html', {'form': form, 'message': 'Wrong login or password'})
 
 class RegisterView(View):
     def get(self,request):
@@ -77,7 +80,7 @@ class RegisterView(View):
             email = form.cleaned_data['email']
 
             if password != password2:
-                return render(request, 'register.html', {'form': form, 'message': 'Hasło się nie zgadza'})
+                return render(request, 'register.html', {'form': form, 'message': 'The password does not match'})
             else:
                 try:
                     User.objects.create_user(username=username, email=email, password=password, first_name=first_name,
@@ -85,7 +88,9 @@ class RegisterView(View):
                     return render(request, 'register.html', {'form': form, 'message': 'User created'})
                 except:
                     return render(request, 'register.html', {'form': form, 'message': 'Username already exist'})
-
+        else:
+            form = RegisterForm()
+            return render(request, 'register.html', {'form': form, 'message': 'Invalid data'})
 
 class UserPageView(LoginRequiredMixin, View):
 
@@ -117,6 +122,13 @@ class UserPageView(LoginRequiredMixin, View):
                               {'form': form, 'list_dicts': list_dicts, 'ok': True, 'attributes': attributes,
                                'dictio': dictio, 'favourites': favourites, 'all_attributes': all_attributes})
 
+            else:
+                form = UserSearchForm()
+                all_attributes = forms.all_attributes
+                favourites = HiddenModel.objects.filter(user_id=request.user.id)
+                return render(request, 'userpage.html', {'form': form, 'all_attributes': all_attributes,
+                                                         'favourites': favourites, 'message': 'Choose attributes'})
+
         elif 'to_db_btn' in request.POST:
             to_db = request.POST['to_db']
             all_attributes = forms.all_attributes
@@ -124,6 +136,7 @@ class UserPageView(LoginRequiredMixin, View):
             HiddenModel.objects.create(to_db=to_db, user_id=request.user.id)
             return render(request, 'userpage.html', {'form': form, 'favourites': favourites,
                                                      'all_attributes': all_attributes})
+
 
 class UserLogoutView(View):
     def get(self, request):

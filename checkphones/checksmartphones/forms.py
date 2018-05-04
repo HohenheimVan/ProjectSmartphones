@@ -2,13 +2,13 @@ from django import forms
 from django.core.validators import EmailValidator
 
 all_attributes =(
-        ('Brand', 'brand'),
-        ('DeviceName','DeviceName'),
-        ('_2g_bands', '_2g_bands'),
-        ('_3_5mm_jack_', '_3_5mm_jack_'),
-        ('_3g_bands', '_3g_bands'),
-        ('_4g_bands', '_4g_bands'),
-        ('alert_types', 'alert_types'),
+        ('Brand', 'Brand'),
+        ('DeviceName','Device Name'),
+        ('_2g_bands', '2g bands'),
+        ('_3_5mm_jack_', '3.5mm jack'),
+        ('_3g_bands', '3g bands'),
+        ('_4g_bands', '4g bands'),
+        ('alert_types', 'alert types'),
         ('announced', 'announced'),
         ('audio_quality', 'audio_quality'),
         ('battery_c', 'battery_c'),

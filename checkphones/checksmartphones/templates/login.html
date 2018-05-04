@@ -13,10 +13,14 @@
             login
         </button>
     </form>
-    {{ message }}
+        {% if message %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endif %}
 
-    <p>
+    <h6>
         or <a href="/register/">register here</a>
-    </p>
+    </h6>
 
 {% endblock %}

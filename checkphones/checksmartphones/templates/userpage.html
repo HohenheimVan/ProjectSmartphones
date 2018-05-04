@@ -13,13 +13,18 @@
             Device: {{ form.device }}
             Brand: {{ form.brand }}
             Position: {{ form.position }}
-            <input type="submit" value="Find" name="find">
+            <input type="submit" class="btn btn-dark" value="Find" name="find">
         </p>
         Attributes:{{ form.attributes }}
 
     </form>
+    {% if message %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endif %}
     {% if ok %}
-        <table class="table-striped table-responsive-xl">
+        <table class="table table-striped table-responsive-xl">
             <tr>
                 {% for attribute in attributes %}
                 <th class="border">
@@ -50,7 +55,7 @@
     {% endif %}
 
     <h3>My Favourite Phones:</h3>
-    <table class="table-striped table-responsive-xl">
+    <table class="table table-striped table-responsive-xl">
         {% for dict in favourites %}
            <tr>
                 {% for i in all_attributes %}
