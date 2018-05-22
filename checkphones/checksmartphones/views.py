@@ -93,14 +93,12 @@ class RegisterView(View):
             return render(request, 'register.html', {'form': form, 'message': 'Invalid data'})
 
 class UserPageView(LoginRequiredMixin, View):
-
     def get(self, request):
         form = UserSearchForm()
         all_attributes = forms.all_attributes
         favourites = HiddenModel.objects.filter(user_id=request.user.id)
         return render(request, 'userpage.html', {'form': form, 'all_attributes': all_attributes,
                                                  'favourites': favourites})
-
 
     def post(self, request):
         form = UserSearchForm(request.POST)
@@ -143,9 +141,6 @@ class UserLogoutView(View):
         logout(request)
         return redirect('/')
 
-class Boot(View):
-    def get(self, request):
-        return render(request, 'index.html')
 
 #Co jest do zrobienia:
     # - wyszukiwanie po atrybutach, np mniejsze od 150g wg. slownika

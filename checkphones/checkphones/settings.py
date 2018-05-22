@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'checksmartphones',
-    'bootstrap3',
 ]
 
 MIDDLEWARE = [
